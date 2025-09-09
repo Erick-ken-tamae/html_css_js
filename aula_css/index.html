@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cursos</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        article p {
+            background-color: lightgray;
+            padding: 20px;
+        }
+
+        /* Todo parágrafo que seja da classe promoção e descendente de um elemento com id = principal */
+        #principal p.promocao {
+            padding: 12px;
+            background-color: yellow;
+        }
+
+        /* Parágrafo da classe coordenadores descendentes de um section, que é descendente de um article, que 
+        é descendente de um elemento com id = principal, que é descendente de um body */
+        body #principal article section p.coordenadores {
+            text-align: center;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <main id="principal">
+
+        <h1 id="titulo">Portal de cursos</h1>
+        <p id="descricao">Temos cursos em diversas áreas</p>
+        <p class="promocao nova">Venha conversar e conhecer nossas ofertas de <strong>bolsas de estudos</strong></p>
+
+        <article>
+
+
+            <p>Cursos</p>
+            <p class="novo-curso">Análise e Desenvolvimento de Sistemas</p>
+            <p class="curso">Ciencia da Computação</p>
+            <p class="curso">Ciencia de Dados</p>
+
+            <section>
+
+                <p class="coordenadores">
+                    Saiba mais sobre nossos coordenadores
+                </p>
+
+            </section>
+
+        </article>
+
+        <!-- Um parágrafo com uma única classe -->
+        <p class="final-pagina" id="contato">Entre em contato conosco: (001) 2345-1234 </p>
+
+        <!-- Parágrafo com id e classe -->
+        <p id="rodape" class="final-pagina">&copy;todos os direitos reservados</p>
+
+    </main>
+</body>
+
+</html>

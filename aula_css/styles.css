@@ -1,0 +1,53 @@
+/* Seletor por id # */
+#titulo {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+/* Seletor por tipo e id  */
+p#descricao {
+    font-size: 20px;
+    color: blue;
+}
+
+/* Seletor por tipo e classe */
+.promocao {
+    text-align: center;
+    background-color: tomato;
+}
+
+hi.promocao {
+    color: brown;
+}
+
+.nova {
+    color: purple;
+}
+
+#rodape.final-pagina {
+    text-align: center;
+    background-color: lightgray;
+    font-size: 14px;
+    color: gray;
+}
+
+/* Cor de fundo para todo mundo da classe curso 
+.curso {}
+*/
+
+/* Cor de fundo para todos da classe novo-curso */
+.novo-curso {
+    color: rgb(255, 0, 0);
+}
+
+/* Para a classe curso OU novo-curso */
+.curso,
+.novo-curso {
+    background-color: lightblue;
+}
+
+.curso, .novo-curso, #contato {
+    padding: 12px;
+    border: 1px solid black;
+}
+
