@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Box Model</title>
+<style>
+body{
+margin: 0px;
+}
+.caixa1, .caixa2{
+width: 300px;
+text-align: justify;
+background-color: #CCC;
+border: 1px solid black;
+}
+.rodape{
+background-color: aliceblue;
+padding: 12px;
+border: 1px solid #EEE;
+text-align: center;
+}
+
+.caixa1{
+    border: 5px solid black;
+    padding: 50px;
+    box-sizing: content-box; /*padrão não vai mudar nada*/
+}
+.caixa2{
+    border: 5px solid black;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+</style>
+</head>
+<body>
+<article>
+<p class="caixa1">
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, nam! Velit corporis, facere sapiente ex vero accusantium
+minima. Excepturi consequatur fugiat incidunt ipsam molestiae soluta magnam quo neque magni adipisci.
+</p>
+<p class="caixa2">
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, nam! Velit corporis, facere sapiente ex vero accusantium
+minima. Excepturi consequatur fugiat incidunt ipsam molestiae soluta magnam quo neque magni adipisci.
+</p>
+<footer class="rodape">
+Volte sempre
+</footer>
+</article>
+</body>
+</html>
