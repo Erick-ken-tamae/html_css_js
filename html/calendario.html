@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFFFFF;
+      margin: 0;
+      padding: 0;
+    }
+
+    .calendario {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    /* Cabeçalho */
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .menu {
+      font-size: 28px;
+      cursor: pointer;
+      color: #000000;
+    }
+
+    .mes {
+      font-size: 22px;
+      font-weight: bold;
+      color: #141313; /* Vermelho destaque */
+    }
+
+    .setas {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .setas button {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: #034EA2; /* Azul */
+      transition: background 0.3s;
+    }
+
+    .setas button:hover {
+      background: #FB8900; /* Amarelo */
+      color: #FFFFFF;
+    }
+
+    .perfil {
+      font-size: 28px;
+      cursor: pointer;
+      color: #000000;
+    }
+
+    /* Grid do calendário */
+    .dias-semana, .dias {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+    }
+
+    .dias-semana div {
+      font-weight: bold;
+      padding: 10px 0;
+      color: #000000;
+    }
+
+    .dias div {
+      padding: 25px 0;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .dias div:hover {
+      background: #0B9247; /* Verde */
+      color: #FFFFFF;
+      border-radius: 6px;
+    }
+
+    /* Destacar domingos em vermelho */
+    .dias div:nth-child(7n) {
+      color: #FF161F; /* Vermelho */
+    }
+  </style>
+
+</head>
+<body>
+  <div class="calendario">
+    <!-- Cabeçalho -->
+    <div class="topo">
+      <div class="menu">☰</div>
+      <div class="mes">Setembro</div>
+      <div class="setas">
+        <button>◀</button>
+        <span>Mês</span>
+        <button>▶</button>
+      </div>
+      <div class="perfil">👤</div>
+    </div>
+
+    <!-- Dias da semana -->
+    <div class="dias-semana">
+      <div>Seg.</div>
+      <div>Ter.</div>
+      <div>Qua.</div>
+      <div>Qui.</div>
+      <div>Sex.</div>
+      <div>Sab.</div>
+      <div>Dom.</div>
+    </div>
+
+    <!-- Dias -->
+    <div class="dias">
+      <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
+      <div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div>
+      <div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div>
+      <div>22</div><div>23</div><div>24</div><div>25</div><div>26</div><div>27</div><div>28</div>
+      <div>29</div><div>30</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+ body {
+      font-family: Arial, sans-serif;
+      background: #BFBFBF; /* cinza claro */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .calendario {
+      background: #FFFFFF; /* fundo branco */
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      width: 850px;
+    }
+
+    /* Cabeçalho */
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      color: #000000;
+    }
+
+    .menu {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .perfil {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .mes {
+      font-size: 22px;
+      font-weight: bold;
+      color: #FF161F; /* vermelho destaque */
+    }
+
+    .setas {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .setas button {
+      background: #034EA2; /* azul */
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    .setas button:hover {
+      background: #FB8900; /* amarelo */
+    }
+
+    /* Grid do calendário */
+    .dias-semana, .dias {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .dias-semana div {
+      text-align: center;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    .dias div {
+      background: #808080; /* cinza escuro */
+      text-align: center;
+      padding: 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #FFFFFF;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .dias div:hover {
+      background: #0B9247; /* verde */
+      transform: scale(1.05);
+    }
+
+    /* Destaque para domingo */
+    .dias div:nth-child(7n) {
+      background: #FF161F; /* vermelho */
+    }
+
+    .dias div:nth-child(7n):hover {
+      background: #842519; /* vermelho escuro */
+    }
