@@ -1,0 +1,25 @@
+===================================
+📘 VARIÁVEIS DO PROJETO
+===================================
+
+Nome (const): Erick Ken Tamae
+Idade (let): 18
+Cidade (var): Santo André
+
+===================================
+📚 DEFINIÇÕES
+===================================
+🔹 var: usada para declarar variáveis de escopo global ou de função (antigo, evite usar)
+🔹 let: usada para declarar variáveis que podem mudar, com escopo de bloco
+🔹 const: usada para declarar constantes (valores fixos), com escopo de bloco
+
+=========================================
+Mostrar no console (print do JavaScript)
+========================================
+console.log("Olá, mundo!")
+console.log("Nome:", nome)
+
+========================
+No terminal do VS Code:
+======================
+node salvarVariaveis.js

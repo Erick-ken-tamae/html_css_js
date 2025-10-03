@@ -1,0 +1,99 @@
+// 🧠 Tipos de Funções em JavaScript
+// Cada tipo tem um formato e uso diferente
+
+// 1️⃣ Função Declarada (Function Declaration)
+// Pode ser chamada antes da definição
+
+function hello() {
+  console.log("Olá!")
+}
+
+hello() // Saída: Olá!
+
+// --------------------------------------------------
+
+// 2️⃣ Função com Parâmetro
+// Recebe valores para usar dentro da função
+
+function saudacao(nome) {
+  console.log("Olá, " + nome)
+}
+
+saudacao("Erick") // Saída: Olá, Erick
+
+// --------------------------------------------------
+
+// 3️⃣ Função com Retorno
+// Retorna um valor para ser usado em outro lugar
+
+function somar(a, b) {
+  return a + b
+}
+
+let resultado = somar(5, 3)
+console.log("Resultado da soma:", resultado) // Saída: 8
+
+// --------------------------------------------------
+
+// 4️⃣ Função Anônima (Anonymous Function)
+// Não tem nome e é atribuída a uma variável
+
+const dizerOla = function() {
+  console.log("Oi!")
+}
+
+dizerOla() // Saída: Oi!
+
+// --------------------------------------------------
+
+// 5️⃣ Arrow Function (Função de Seta)
+
+// Forma moderna e curta de escrever funções
+const saudacaoArrow = (nome) => {
+  console.log("Olá (Arrow), " + nome)
+}
+
+saudacaoArrow("Ken") // Saída: Olá (Arrow), Ken
+
+// ✅ Se for só uma linha, pode simplificar:
+const dobro = n => n * 2
+console.log("Dobro de 4:", dobro(4)) // Saída: 8
+
+// --------------------------------------------------
+
+// 6️⃣ Função Autoexecutável (IIFE)
+// Executa automaticamente quando é criada
+(function() {
+  console.log("Executou automaticamente (IIFE)!")
+})()
+
+// --------------------------------------------------
+
+// 7️⃣ Função com Valor Padrão
+// Usa valor padrão se o parâmetro não for informado
+
+function helloPadrao(nome = "visitante") {
+  console.log("Olá, " + nome)
+}
+
+helloPadrao() // Saída: Olá, visitante
+helloPadrao("Erick") // Saída: Olá, Erick
+
+// --------------------------------------------------
+
+// 8️⃣ Função Aninhada (Função dentro de outra)
+
+function externa() {
+  console.log("Função externa")
+  
+  function interna() {
+    console.log("Sou a função interna")
+  }
+  
+  interna()
+}
+
+externa()
+// Saída:
+// Função externa
+// Sou a função interna
