@@ -23,4 +23,17 @@ app.get("/filmes", (req, res) => {
     res.json(filmes)
 })
 
+// REQUISÃO PARA CADASTRAR UM NOVO FILME NAA MEMÓRIA
+//POST http://localhost:3000/filmes
+app.post("/filmes", (req, res) => {
+    //obtem as informações que chegam 
+    const titulo = req.body.titulo
+    const sinopse =  req.body.sinopse
+    //monta o objeto json
+    const filme = {titulo: titulo, sinopse: sinopse}
+    filmes.push(filme)
+    //só para verificar
+    res.send(filmes)
+})
+
 app.listen(3000, () => console.log(" SERVIDOR up and running"))
