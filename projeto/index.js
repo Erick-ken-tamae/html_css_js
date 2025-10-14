@@ -1,8 +1,8 @@
-const e = require('express')
-const express = require('express')
-const app = express()
-app.use(express.json())
-
+const express = require('express');
+const cors = require("cors");
+const app = express();
+app.use(express.json());
+app.use(cors())
 //REQUISISÃO GET no endereço http://localhost:3000/oi
 app.get('/oi', (req, res) => {
     res.send('OI')
@@ -17,8 +17,12 @@ let filmes = [
         titulo: "Um Sonho de Liberdade",
         sinopse: "Em 1946, Andy Dufresne (Tim Robbins), um jovem e bem sucedido banqueiro, tem a sua vida radicalmente modificada ao ser condenado por um crime quenunca cometeu, o homicídio de sua esposa e do amantedela"
     },
+    {
+        "titulo": "Interestelar",
+        "sinopse": "As reservas naturais da Terra estão chegando ao fim e um grupo de astronautas recebe a missão de verificar possíveis planetas para receberem a população mundial, possibilitando a continuação da espécie. Cooper é chamado para liderar o grupo e aceita a missão sabendo que pode nunca mais ver os filhos. Ao lado de Brand, Jenkins e Doyle, ele seguirá em busca de um novo lar"
+    },
 ];
-//requisição GET para obter lsiat de filmes http://lcoalhost:3000/filmes
+//requisição GET para obter lsiat de filmes http://localhost:3000/filmes
 app.get("/filmes", (req, res) => {
     res.json(filmes)
 })
