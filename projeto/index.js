@@ -1,3 +1,6 @@
+//aqui esta nossa string de conxeao com banco de dados
+//mongodb+srv://erick_ken:<db_password>@cluster0.uzkctku.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
 const express = require("express");
 const cors = require("cors")
 const app = express();
