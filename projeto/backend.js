@@ -1,69 +1,108 @@
 const express = require("express");
-const cors = require("cors")
-const mongoose =  require('mongoose')
-require('dotenv').config()
+const cors = require("cors");
+const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 const app = express();
+
+
 app.use(express.json());
-app.use(cors())
+app.use(cors());
+dotenv.config();
 
 const Filme = mongoose.model("Filme", mongoose.Schema({
   titulo: {type: String},
   sinopse: {type: String}
 }))
 
+const usuarioSchema = mongoose.Schema({
+  login: {type: String, required: true, unique: true},
+  password: {type: String, required: true}
+})
+usuarioSchema.plugin(uniqueValidator)
+const Usuario = mongoose.model("Usuario", usuarioSchema)
 
-const stringConexao = process.env.CONEXAO_DB
+const stringConexao = process.env.CONEXAO_BD;
 
 async function conectarAoMongoDB() {
-  await mongoose.connect(stringConexao)
+  await mongoose.connect(stringConexao);
 }
 
-//requisição GET no endereço http://localhost:3000/oi
-app.get("/oi", (req, res) => {
-  res.send("oi");
+//requisição GET para obter a lista de filmes: http://localhost:3000/filmes
+app.get("/filmes", async (req, res) => {
+  const filmes = await Filme.find()
+  res.json(filmes);
 });
 
-// let filmes = [
-//   {
-//     titulo: "Forrest Gump - O Contador de Histórias",
-//     sinopse:
-//       "Quarenta anos da história dos Estados Unidos, vistos pelos olhos de Forrest Gump (Tom Hanks), um rapaz com QI abaixo da média e boas intenções.",
-//   },
-//   {
-//     titulo: "Um Sonho de Liberdade",
-//     sinopse:
-//       "Em 1946, Andy Dufresne (Tim Robbins), um jovem e bem sucedido banqueiro, tem a sua vida radicalmente modificada ao ser condenado por um crime que nunca cometeu, o homicídio de sua esposa e do amante dela",
-//   },
-// ];
-
-//requisição GET para obter a lista de filmes: http://localhost:3000/filmes
-app.get("/filmes", async(req, res) => {
-  const filmes = await Filme.find()
-    res.json(filmes);
-})
-
-//requisição para cadastrar um novo filme no banco
+//requisição para cadastrar um novo filme no banco, lá longe
 //post http://localhost:3000/filmes
-app.post("/filmes", async(req, res) => {
+app.post("/filmes", async (req, res) => {
   //obtem as informações que chegam
-  const titulo = req.body.titulo
-  const sinopse = req.body.sinopse
-  //montar um objeto json de acordo com o model Filme (classe)
-  const filme = new Filme ({titulo: titulo, sinopse: sinopse});
+  const titulo = req.body.titulo;
+  const sinopse = req.body.sinopse;
+  //monta um objeto de acordo com o model Filme (classe)
+  const filme = new Filme({ titulo: titulo, sinopse: sinopse });
   //mandar o filme para o banco
   await filme.save()
   //buscar a lista de filmes atualizada do banco
   const filmes = await Filme.find()
   res.json(filmes);
-})
+});
 
-app.listen(3000, () => {
-  try{
-    conectarAoMongoDB()
-    console.log("up and running and connection ok")
+app.post('/signup', async (req, res) => {
+  try {
+    const login = req.body.login
+    const password = req.body.password
+    const passwordCriptografada = await bcrypt.hash(password, 10)
+    const usuario = new Usuario({ login: login, password: passwordCriptografada})
+    const respMongo = await usuario.save()
+    console.log (respMongo)
+    res.status(201).end()
   }
-  catch (e){
-    console.log('Erro', e)
+  catch (exception) {
+    console.log(exception)
+    res.status(409).end()
+  }
+})
+app.post('/login', async (req, res) => {
+  //login/senha que o usuário enviou
+  const login = req.body.login
+  const password = req.body.password
+  //tentamos encontrar no MongoDB
+  const u = await Usuario.findOne({login: req.body.login})
+  if(!u){
+  //senão foi encontrado, encerra por aqui com código 401
+  return res.status(401).json({mensagem: "login inválido"})
+  }
+  //se foi encontrado, comparamos a senha, após descriptográ-la
+  const senhaValida = await bcrypt.compare(password, u.password)
+  if (!senhaValida){
+  return res.status(401).json({mensagem: "senha inválida"})
+  }
+  //aqui vamos gerar o token e devolver para o cliente
+  const token = jwt.sign(
+    {login: login},
+    //depois vamos mudar para uma chave secreta de verdade
+    "chave-secreta",
+    {expiresIn: "1h"}
+    )
+    res.status(200).json({token: token})
+  })
+  
+
+  
+
+
+
+const PORTA = 3000
+app.listen(PORTA, () => {
+  try {
+    conectarAoMongoDB();
+    console.log("servidor up and running on " + PORTA + " and connection ok");
+  } 
+  catch (e) {
+    console.log("erro: " + e);
   }
 });
-  

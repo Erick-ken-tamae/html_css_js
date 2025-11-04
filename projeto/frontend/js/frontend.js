@@ -1,7 +1,11 @@
 const protocolo = "http://";
 const baseURL = "localhost:3000";
-const filmesEndpoint = "/filmes";
-
+// não deve existir mais aqui
+//const filmesEndpoint = '/filmes'
+async function obterFilmes() {
+  //existe aqui
+  const filmesEndpoint = '/filmes'
+}
 async function obtemFilmes() {
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
   const filmes = (await axios.get(URLcompleta)).data;
@@ -19,6 +23,8 @@ async function obtemFilmes() {
   }
 }
 async function cadastrarFilme() {
+  //aqui também
+  const filmesEndpoint = '/filmes'
   //montamos a URL completa
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
   //pega os inputs digitados pelo usuário
@@ -43,14 +49,14 @@ async function cadastrarFilme() {
       celulaSinopse.innerHTML = filme.sinopse;
     }
   }
-  //senão, exibe o alerta por até 2 segundos
-  else{
+  else {
+    //exibir o alerta por até 2 segundos
     let alert = document.querySelector('.alert')
     alert.classList.add('show')
     alert.classList.remove('d-none')
-    setTimeout(() =>{
-      alert.classList.remove('show')
-      alert.classList.add('d-none')
+    setTimeout(() => {
+        alert.classList.remove('show')
+        alert.classList.add('d-none')
     }, 2000)
   }
 }
