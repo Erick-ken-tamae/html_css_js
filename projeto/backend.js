@@ -1,19 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
-const dotenv = require("dotenv");
-const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
-const app = express();
+const express = require('express')
+const cors = require('cors')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const uniqueValidator = require('mongoose-unique-validator')
+const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken")
+const app = express()
+app.use(express.json())
+app.use(cors())
+dotenv.config()
 
+const stringConexaoBD = process.env.CONEXAO_BD
 
-app.use(express.json());
-app.use(cors());
-dotenv.config();
+//função de conexão com o banco
+async function conectarAoMongoDB () {
+  await mongoose.connect(stringConexaoBD)
+}
 
-const Filme = mongoose.model("Filme", mongoose.Schema({
-  titulo: {type: String},
+const Filme = mongoose.model ("Filme", mongoose.Schema({
+  titulo: {type: String}, 
   sinopse: {type: String}
 }))
 
@@ -24,85 +29,79 @@ const usuarioSchema = mongoose.Schema({
 usuarioSchema.plugin(uniqueValidator)
 const Usuario = mongoose.model("Usuario", usuarioSchema)
 
-const stringConexao = process.env.CONEXAO_BD;
+//endpoint para atender um get filmes: http://localhost:3000/filmes
+app.get('/filmes', async (req, res) => {
+    const filmes = await Filme.find()
+    res.json(filmes)
+})
 
-async function conectarAoMongoDB() {
-  await mongoose.connect(stringConexao);
-}
-
-//requisição GET para obter a lista de filmes: http://localhost:3000/filmes
-app.get("/filmes", async (req, res) => {
-  const filmes = await Filme.find()
-  res.json(filmes);
-});
-
-//requisição para cadastrar um novo filme no banco, lá longe
-//post http://localhost:3000/filmes
-app.post("/filmes", async (req, res) => {
-  //obtem as informações que chegam
-  const titulo = req.body.titulo;
-  const sinopse = req.body.sinopse;
-  //monta um objeto de acordo com o model Filme (classe)
-  const filme = new Filme({ titulo: titulo, sinopse: sinopse });
-  //mandar o filme para o banco
-  await filme.save()
-  //buscar a lista de filmes atualizada do banco
-  const filmes = await Filme.find()
-  res.json(filmes);
-});
-
+//cadastrar um novo filme: post filmes: http://localhost:3000/filmes
+app.post('/filmes', async (req, res) => {
+    //capturar as informações do usuário
+    const titulo = req.body.titulo
+    const sinopse = req.body.sinopse
+    //construir um objeto filme da classe Filme
+    const filme = new Filme({titulo: titulo, sinopse: sinopse})
+    //salvar o filme no banco
+    await filme.save()
+    //buscar no banco a base atualizada
+    const filmes = await Filme.find()
+    res.json(filmes)
+})
 app.post('/signup', async (req, res) => {
   try {
+    //captura o que o usuário digita
     const login = req.body.login
     const password = req.body.password
+    //criptografar a senha
     const passwordCriptografada = await bcrypt.hash(password, 10)
-    const usuario = new Usuario({ login: login, password: passwordCriptografada})
-    const respMongo = await usuario.save()
-    console.log (respMongo)
+    //constroi o objeto usuário
+    const usuario = new Usuario({
+      login: login,
+      password: passwordCriptografada
+    })
+    //salvar o usuário, capturando a resposta do Mongo
+    const respostaMongo = await usuario.save()
+    console.log(respostaMongo);
     res.status(201).end()
   }
-  catch (exception) {
+    catch (exception) {
     console.log(exception)
     res.status(409).end()
   }
 })
+
 app.post('/login', async (req, res) => {
-  //login/senha que o usuário enviou
+  //captura o que o usuário digita
   const login = req.body.login
   const password = req.body.password
-  //tentamos encontrar no MongoDB
-  const u = await Usuario.findOne({login: req.body.login})
-  if(!u){
-  //senão foi encontrado, encerra por aqui com código 401
-  return res.status(401).json({mensagem: "login inválido"})
+  //busca no banco MongoDB
+  const user = await Usuario.findOne({login: login})
+  if (!user) {
+    //usuário não encontrado, encerra com mensagem adequada
+    return res.status(401).json({mesagem: "usuário inválido"})
   }
-  //se foi encontrado, comparamos a senha, após descriptográ-la
-  const senhaValida = await bcrypt.compare(password, u.password)
-  if (!senhaValida){
-  return res.status(401).json({mensagem: "senha inválida"})
+  const senhaValida = await bcrypt.compare(password, user.password)
+  if (!senhaValida) {
+    //senha inválida, encerra com mensagem adequada
+    return res.status(401).json({mensagem: "senha inválida"})
   }
-  //aqui vamos gerar o token e devolver para o cliente
+  //vamos gerar o token e dovolver
   const token = jwt.sign(
     {login: login},
-    //depois vamos mudar para uma chave secreta de verdade
-    "chave-secreta",
+    "senha-secreta",
     {expiresIn: "1h"}
-    )
-    res.status(200).json({token: token})
-  })
-  
-
-  
+  )
+  res.status(200).json({token: token})
+})
 
 
-
-const PORTA = 3000
-app.listen(PORTA, () => {
-  try {
-    conectarAoMongoDB();
-    console.log("servidor up and running on " + PORTA + " and connection ok");
-  } 
-  catch (e) {
-    console.log("erro: " + e);
-  }
-});
+app.listen(3000, () => {
+    try {
+      conectarAoMongoDB()
+      console.log('server up & running & conexão ok')
+    }
+    catch (e) {
+      console.log("erro:" + e)
+    }
+})

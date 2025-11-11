@@ -1,20 +1,15 @@
 const protocolo = "http://";
 const baseURL = "localhost:3000";
-// não deve existir mais aqui
-//const filmesEndpoint = '/filmes'
-async function obterFilmes() {
-  //existe aqui
-  const filmesEndpoint = '/filmes'
-}
+
 async function obtemFilmes() {
+  const filmesEndpoint = "/filmes";
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
   const filmes = (await axios.get(URLcompleta)).data;
-  //console.log(filmes)
   let tabela = document.querySelector(".filmes");
+  //posicionar sobre o corpo da tabela pela sua tag
   let corpoTabela = tabela.getElementsByTagName("tbody")[0];
-  //para cada filme, criar uma nova linha
+  //para cada filme na lista de filmes, criar uma linha nova
   for (let filme of filmes) {
-    //a inserção da linha será no início, poderia ser no fim (sem argumentos no insertRow)
     let linha = corpoTabela.insertRow(0);
     let celulaTitulo = linha.insertCell(0);
     let celulaSinopse = linha.insertCell(1);
@@ -22,12 +17,12 @@ async function obtemFilmes() {
     celulaSinopse.innerHTML = filme.sinopse;
   }
 }
+
 async function cadastrarFilme() {
-  //aqui também
-  const filmesEndpoint = '/filmes'
-  //montamos a URL completa
+  const filmesEndpoint = "/filmes";
+  //montar a URL
   const URLcompleta = `${protocolo}${baseURL}${filmesEndpoint}`;
-  //pega os inputs digitados pelo usuário
+  //pegar os dados que o usuário digitou
   let tituloInput = document.querySelector("#tituloInput");
   let sinopseInput = document.querySelector("#sinopseInput");
   let titulo = tituloInput.value;
@@ -36,11 +31,13 @@ async function cadastrarFilme() {
     //limpa as caixinhas de input
     tituloInput.value = "";
     sinopseInput.value = "";
+    //requisição post para o back, que devolve a lista de filmes atualizada
     const filmes = (await axios.post(URLcompleta, { titulo, sinopse })).data;
-    //limpar a tabela e preencher com a lista nova de filmes
+    //limpa o corpo da tabela
     let tabela = document.querySelector(".filmes");
     let corpoTabela = tabela.getElementsByTagName("tbody")[0];
     corpoTabela.innerHTML = "";
+    //remontando a tabela
     for (let filme of filmes) {
       let linha = corpoTabela.insertRow(0);
       let celulaTitulo = linha.insertCell(0);
@@ -48,15 +45,76 @@ async function cadastrarFilme() {
       celulaTitulo.innerHTML = filme.titulo;
       celulaSinopse.innerHTML = filme.sinopse;
     }
+    exibirAlerta('.alert-filme', 'Filme cadastrado com sucesso', ['show',
+    'alert-success'], ['d-none'], 2000)
+      
   }
   else {
-    //exibir o alerta por até 2 segundos
-    let alert = document.querySelector('.alert')
-    alert.classList.add('show')
-    alert.classList.remove('d-none')
-    setTimeout(() => {
-        alert.classList.remove('show')
-        alert.classList.add('d-none')
-    }, 2000)
+    exibirAlerta('.alert-filme', 'Preencha todos os campos', ['show',
+      'alert-danger'], ['d-none'], 2000)
+  }
+}
+async function cadastrarUsuario() {
+  let usuarioCadastroInput = document.querySelector('#usuarioCadastroInput')
+  let passwordCadastroInput = document.querySelector('#passwordCadastroInput')
+  let usuarioCadastro = usuarioCadastroInput.value
+  let passwordCadastro = passwordCadastroInput.value
+  if (usuarioCadastro && passwordCadastro) {
+    try {
+      const cadastroEndpoint = '/signup'
+      const URLCompleta = `${protocolo}${baseURL}${cadastroEndpoint}`
+      await axios.post(URLCompleta, {
+        login: usuarioCadastro, password:
+          passwordCadastro
+      })
+      usuarioCadastroInput.value = ""
+      passwordCadastroInput.value = ""
+      exibirAlerta('.alert-modal-cadastro', "Usuário cadastrado com sucesso!",
+        ['show', 'alert-success'], ['d-none', 'alert-danger'], 2000)
+        ocultarModal('#modalLogin', 2000)
+    }
+    catch (error) {
+      exibirAlerta('.alert-modal-cadastro', "Erro ao cadastrar usuário", ['show',
+        'alert-danger'], ['d-none', 'alert-success'], 2000)
+        ocultarModal('#modalLogin', 2000)
+    }
+  }
+  else {
+    exibirAlerta('.alert-modal-cadastro', 'Preencha todos os campos', ['show',
+      'alert-danger'], ['d-none', 'alert-success'], 2000)
+  }
+}
+
+function ocultarModal(seletor, timeout){
+  setTimeout(() => {
+    let modal = boodstrap.Modal.getInstance(document.querySelector(seletor))
+    modal.hide()
+  }, timeout)
+}
+
+
+async function fazerLogin() {
+  const login = document.getElementById("usuarioLoginInput").value;
+  const password = document.getElementById("passwordLoginInput").value;
+
+  if (!login || !password) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  try {
+    const resposta = await axios.post("http://localhost:3000/login", {
+      login: login,
+      password: password
+    });
+
+    const token = resposta.data.token;
+    localStorage.setItem("token", token);
+
+    alert("Login realizado com sucesso!");
+    console.log("Token:", token);
+  } catch (erro) {
+    console.error(erro);
+    alert("Usuário ou senha inválidos!");
   }
 }
